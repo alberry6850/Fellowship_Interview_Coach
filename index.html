@@ -1,456 +1,504 @@
 
-<h2 class="sr-only">Fellowship Interview Preparation Coach — an interactive AI coaching application for medical residents applying to fellowship programs, now including a post-interview communications module</h2>
+<h2 class="sr-only">UCF Fellowship Interview Preparation Coach — an interactive AI coaching application for medical residents applying to fellowship programs, styled in UCF black and gold</h2>
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-#app { padding: 1rem 0; }
-.header { text-align: center; padding: 1.5rem 1rem 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 1.5rem; }
-.header h1 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
-.header p { font-size: 14px; color: var(--color-text-secondary); }
-.badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--border-radius-md); background: var(--color-background-info); color: var(--color-text-info); margin-bottom: 8px; }
-.module-nav { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 1rem; margin-bottom: 1.5rem; }
-.mod-btn { font-size: 12px; padding: 6px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
-.mod-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.mod-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
-.mod-btn .check { font-size: 10px; }
-.panel { padding: 0 1rem; }
-.module-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-.module-card h2 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-.module-card .desc { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 1rem; }
-.tip-box { background: var(--color-background-info); border-left: 3px solid var(--color-border-info); border-radius: 0; padding: 10px 14px; font-size: 13px; color: var(--color-text-info); line-height: 1.6; margin-bottom: 1rem; }
-.warn-box { background: var(--color-background-warning); border-left: 3px solid var(--color-border-warning); border-radius: 0; padding: 10px 14px; font-size: 13px; color: var(--color-text-warning); line-height: 1.6; margin-bottom: 1rem; }
-label { display: block; font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 6px; margin-top: 1rem; }
-textarea { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); resize: vertical; line-height: 1.6; min-height: 90px; }
-textarea:focus { outline: none; border-color: var(--color-border-primary); }
-input[type="text"], select { width: 100%; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-primary); }
-input[type="text"]:focus, select:focus { outline: none; border-color: var(--color-border-primary); }
-.btn-row { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
-.btn { font-size: 13px; padding: 8px 18px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; gap: 6px; }
-.btn:hover { background: var(--color-background-secondary); }
-.btn:active { transform: scale(0.98); }
-.btn-primary { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
-.btn-primary:hover { opacity: 0.9; background: var(--color-background-info); }
-.btn-success { background: var(--color-background-success); color: var(--color-text-success); border-color: transparent; font-weight: 500; }
-.ai-response { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; font-size: 14px; color: var(--color-text-primary); line-height: 1.7; margin-top: 1rem; white-space: pre-wrap; min-height: 60px; }
-.ai-response.loading { color: var(--color-text-secondary); font-style: italic; }
-.star-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
-.star-label { font-size: 12px; font-weight: 500; padding: 3px 8px; border-radius: var(--border-radius-md); min-width: 70px; text-align: center; }
-.s-label { background: #E6F1FB; color: #0C447C; }
-.t-label { background: #EAF3DE; color: #27500A; }
-.a-label { background: #FAEEDA; color: #633806; }
-.r-label { background: #FAECE7; color: #712B13; }
-.question-chip { display: inline-block; font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 20px; background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; margin: 3px; }
-.question-chip:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.progress-wrap { margin-bottom: 1.5rem; padding: 0 1rem; }
-.progress-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 5px; display: flex; justify-content: space-between; }
-.progress-bar { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; }
-.progress-fill { height: 4px; background: var(--color-text-info); border-radius: 2px; transition: width 0.4s; }
-.report-section { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; margin-bottom: 1rem; }
-.report-section h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-.report-section p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
-.checklist-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 14px; color: var(--color-text-primary); line-height: 1.5; }
-.checklist-item:last-child { border-bottom: none; }
-.check-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
-.comm-type-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1rem; }
-.comm-type-card { border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; cursor: pointer; background: var(--color-background-primary); transition: all 0.15s; }
-.comm-type-card:hover { background: var(--color-background-secondary); }
-.comm-type-card.selected { border: 2px solid var(--color-border-info); background: var(--color-background-info); }
-.comm-type-card .ct-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
-.comm-type-card.selected .ct-title { color: var(--color-text-info); }
-.comm-type-card .ct-sub { font-size: 11px; color: var(--color-text-secondary); }
-.comm-type-card.selected .ct-sub { color: var(--color-text-info); opacity: 0.8; }
-.draft-preview { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px 16px; font-size: 13px; color: var(--color-text-primary); line-height: 1.8; white-space: pre-wrap; margin-top: 1rem; font-family: var(--font-sans); }
-.timeline-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
-.timeline-row:last-child { border-bottom: none; }
-.timeline-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
-.dot-info { background: var(--color-background-info); color: var(--color-text-info); }
-.dot-warn { background: var(--color-background-warning); color: var(--color-text-warning); }
-.dot-success { background: var(--color-background-success); color: var(--color-text-success); }
-.timeline-content .tl-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
-.timeline-content .tl-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin-top: 2px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ucf-gold:#FFC904;
+  --ucf-gold-light:#FFF3C0;
+  --ucf-gold-muted:#E8B800;
+  --ucf-black:#101010;
+  --ucf-charcoal:#1C1C1C;
+  --ucf-dark:#2A2A2A;
+  --ucf-surface:#F8F6F0;
+  --ucf-border:#E2DDD0;
+  --ucf-border-dark:#C8C2B0;
+  --ucf-text:#1C1C1C;
+  --ucf-text-muted:#5A5548;
+  --ucf-text-light:#8A8070;
+}
+#app{padding:0 0 2rem;}
+
+.ucf-header{background:#101010;padding:1.5rem 1.5rem 1.25rem;margin-bottom:0;}
+.ucf-header-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.ucf-logo-mark{width:36px;height:36px;background:#FFC904;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ucf-logo-mark i{font-size:20px;color:#101010;}
+.ucf-header h1{font-size:18px;font-weight:500;color:#FFC904;margin-bottom:2px;}
+.ucf-header p{font-size:13px;color:#A89E8A;line-height:1.5;}
+.ucf-badge{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.06em;padding:3px 9px;border-radius:3px;background:#FFC904;color:#101010;text-transform:uppercase;margin-bottom:8px;}
+
+.progress-wrap{background:#1C1C1C;padding:10px 1.5rem 14px;}
+.progress-label{font-size:11px;color:#A89E8A;margin-bottom:6px;display:flex;justify-content:space-between;}
+.progress-label span:last-child{color:#FFC904;font-weight:500;}
+.progress-bar{height:3px;background:#333;border-radius:2px;}
+.progress-fill{height:3px;background:#FFC904;border-radius:2px;transition:width 0.4s;}
+
+.module-nav{display:flex;gap:6px;flex-wrap:wrap;padding:14px 1.5rem;background:#F8F6F0;border-bottom:1.5px solid #101010;}
+.mod-btn{font-size:11px;font-weight:500;padding:6px 11px;border:1.5px solid #C8C2B0;border-radius:4px;background:#fff;color:#5A5548;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:4px;letter-spacing:0.01em;}
+.mod-btn:hover{border-color:#101010;color:#101010;}
+.mod-btn.active{background:#101010;color:#FFC904;border-color:#101010;}
+.mod-btn .chk{font-size:10px;color:#FFC904;}
+
+.panel{padding:1.25rem 1.5rem;}
+
+.section-card{background:#fff;border:1.5px solid #E2DDD0;border-radius:8px;padding:1.25rem;margin-bottom:1rem;}
+.section-card.gold-top{border-top:3px solid #FFC904;}
+.section-card.black-top{border-top:3px solid #101010;}
+
+.card-heading{display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+.card-heading h2{font-size:15px;font-weight:500;color:#101010;}
+.card-heading i{font-size:18px;color:#FFC904;}
+.card-desc{font-size:13px;color:#5A5548;line-height:1.65;margin-bottom:1rem;}
+
+.tip-box{background:#FFF3C0;border:1px solid #E8B800;border-radius:6px;padding:10px 13px;font-size:13px;color:#5A3E00;line-height:1.6;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start;}
+.tip-box i{color:#E8B800;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.warn-box{background:#FFF8E6;border:1px solid #E8B800;border-radius:6px;padding:10px 13px;font-size:13px;color:#6B4C00;line-height:1.6;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start;}
+.warn-box i{color:#E8B800;font-size:15px;flex-shrink:0;margin-top:1px;}
+
+.field-group{background:#F8F6F0;border:1.5px solid #E2DDD0;border-radius:6px;padding:1rem;margin-bottom:.75rem;}
+.field-group-title{font-size:11px;font-weight:500;color:#8A8070;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;}
+
+label{display:block;font-size:12px;font-weight:500;color:#5A5548;margin-bottom:5px;margin-top:.75rem;}
+label:first-child{margin-top:0;}
+textarea{width:100%;border:1.5px solid #C8C2B0;border-radius:6px;padding:9px 11px;font-size:13px;font-family:var(--font-sans);color:#1C1C1C;background:#fff;resize:vertical;line-height:1.6;min-height:80px;}
+textarea:focus{outline:none;border-color:#101010;}
+input[type="text"],select{width:100%;border:1.5px solid #C8C2B0;border-radius:6px;padding:8px 11px;font-size:13px;font-family:var(--font-sans);color:#1C1C1C;background:#fff;}
+input[type="text"]:focus,select:focus{outline:none;border-color:#101010;}
+
+.btn-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap;}
+.btn{font-size:12px;font-weight:500;padding:8px 16px;border:1.5px solid #C8C2B0;border-radius:5px;background:#fff;color:#1C1C1C;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s;letter-spacing:0.01em;}
+.btn:hover{border-color:#101010;background:#F8F6F0;}
+.btn:active{transform:scale(0.98);}
+.btn-gold{background:#FFC904;color:#101010;border-color:#FFC904;font-weight:500;}
+.btn-gold:hover{background:#E8B800;border-color:#E8B800;}
+.btn-black{background:#101010;color:#FFC904;border-color:#101010;}
+.btn-black:hover{background:#2A2A2A;border-color:#2A2A2A;}
+.btn-success{background:#EAF3DE;color:#27500A;border-color:#C0DD97;}
+
+.ai-box{background:#F8F6F0;border:1.5px solid #E2DDD0;border-radius:6px;padding:12px 14px;font-size:13px;color:#1C1C1C;line-height:1.75;margin-top:.75rem;white-space:pre-wrap;}
+.ai-box.loading{color:#8A8070;font-style:italic;}
+.ai-box-header{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#E8B800;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+
+.star-grid{display:flex;flex-direction:column;gap:8px;}
+.star-row{display:flex;gap:10px;align-items:flex-start;}
+.star-pill{font-size:11px;font-weight:500;padding:4px 9px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0;margin-top:8px;}
+.sp-s{background:#101010;color:#FFC904;}
+.sp-t{background:#FFF3C0;color:#5A3E00;border:1px solid #E8B800;}
+.sp-a{background:#FFC904;color:#101010;}
+.sp-r{background:#E2DDD0;color:#2A2A2A;}
+
+.q-chip{display:inline-block;font-size:11px;padding:4px 10px;border:1.5px solid #C8C2B0;border-radius:4px;background:#fff;color:#5A5548;cursor:pointer;margin:3px;}
+.q-chip:hover{border-color:#101010;color:#101010;}
+
+.checklist-section-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#8A8070;padding:8px 0 4px;margin-top:4px;}
+.check-row{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid #E2DDD0;font-size:13px;color:#1C1C1C;line-height:1.5;}
+.check-row:last-child{border-bottom:none;}
+.check-row i{color:#FFC904;font-size:15px;margin-top:1px;flex-shrink:0;}
+
+.comm-toggle{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;}
+.ct-card{border:1.5px solid #C8C2B0;border-radius:6px;padding:10px 12px;cursor:pointer;background:#fff;transition:all 0.15s;}
+.ct-card:hover{border-color:#101010;}
+.ct-card.sel{border-color:#FFC904;background:#FFF3C0;border-width:2px;}
+.ct-card .ct-icon{font-size:18px;color:#8A8070;margin-bottom:4px;}
+.ct-card.sel .ct-icon{color:#E8B800;}
+.ct-card .ct-title{font-size:12px;font-weight:500;color:#1C1C1C;}
+.ct-card .ct-sub{font-size:11px;color:#8A8070;margin-top:1px;}
+
+.timeline-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #E2DDD0;}
+.timeline-item:last-child{border-bottom:none;}
+.tl-badge{min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;text-align:center;line-height:1.2;}
+.tl-b1{background:#101010;color:#FFC904;}
+.tl-b2{background:#FFF3C0;color:#5A3E00;border:1px solid #E8B800;}
+.tl-b3{background:#FFC904;color:#101010;}
+.tl-text .tl-t{font-size:13px;font-weight:500;color:#1C1C1C;}
+.tl-text .tl-d{font-size:12px;color:#5A5548;line-height:1.5;margin-top:2px;}
+
+.draft-preview{background:#F8F6F0;border:1.5px solid #E2DDD0;border-radius:6px;padding:14px;font-size:13px;color:#1C1C1C;line-height:1.8;white-space:pre-wrap;margin-top:.75rem;}
+
+.report-block{background:#F8F6F0;border:1.5px solid #E2DDD0;border-radius:6px;padding:.9rem 1rem;margin-bottom:.75rem;}
+.report-block-head{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.report-block-head i{font-size:14px;color:#E8B800;}
+.report-block-head span{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#8A8070;}
+.report-block p{font-size:13px;color:#1C1C1C;line-height:1.7;white-space:pre-wrap;}
+
+.success-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FFF3C0;border:1.5px solid #E8B800;border-radius:6px;margin-bottom:1rem;}
+.success-bar i{color:#E8B800;font-size:18px;}
+.success-bar span{font-size:13px;font-weight:500;color:#5A3E00;}
+
+.divider{height:1px;background:#E2DDD0;margin:1rem 0;}
+.confirm-msg{font-size:12px;color:#27500A;margin-top:6px;display:none;}
 </style>
 
 <div id="app">
-  <div class="header">
-    <div class="badge"><i class="ti ti-stethoscope" aria-hidden="true"></i> Fellowship Interview Coach</div>
-    <h1>Your personalized interview preparation plan</h1>
-    <p>Work through each module to build your fellowship interview toolkit — you'll receive a complete preparation report at the end.</p>
-  </div>
 
-  <div class="progress-wrap">
-    <div class="progress-label">
-      <span>Overall progress</span>
-      <span id="progress-pct">0% complete</span>
+<div class="ucf-header">
+  <div class="ucf-header-top">
+    <div class="ucf-logo-mark"><i class="ti ti-stethoscope" aria-hidden="true"></i></div>
+    <div>
+      <div class="ucf-badge">UCF College of Medicine</div>
+      <h1>Fellowship Interview Coach</h1>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
   </div>
+  <p>Work through each module to build your personalized interview plan — you'll receive a complete preparation report at the end.</p>
+</div>
 
-  <div class="module-nav" id="mod-nav">
-    <button class="mod-btn active" onclick="showModule(0)" id="nav-0"><i class="ti ti-user" aria-hidden="true"></i> Your story <span class="check" id="chk-0"></span></button>
-    <button class="mod-btn" onclick="showModule(1)" id="nav-1"><i class="ti ti-target" aria-hidden="true"></i> Goals <span class="check" id="chk-1"></span></button>
-    <button class="mod-btn" onclick="showModule(2)" id="nav-2"><i class="ti ti-book" aria-hidden="true"></i> Program fit <span class="check" id="chk-2"></span></button>
-    <button class="mod-btn" onclick="showModule(3)" id="nav-3"><i class="ti ti-message-circle" aria-hidden="true"></i> STAR practice <span class="check" id="chk-3"></span></button>
-    <button class="mod-btn" onclick="showModule(4)" id="nav-4"><i class="ti ti-help-circle" aria-hidden="true"></i> Questions to ask <span class="check" id="chk-4"></span></button>
-    <button class="mod-btn" onclick="showModule(5)" id="nav-5"><i class="ti ti-checklist" aria-hidden="true"></i> Interview day <span class="check" id="chk-5"></span></button>
-    <button class="mod-btn" onclick="showModule(6)" id="nav-6"><i class="ti ti-mail" aria-hidden="true"></i> Post-interview <span class="check" id="chk-6"></span></button>
-    <button class="mod-btn" onclick="showModule(7)" id="nav-7"><i class="ti ti-file-text" aria-hidden="true"></i> My report</button>
-  </div>
+<div class="progress-wrap">
+  <div class="progress-label"><span>Overall progress</span><span id="progress-pct">0 of 7 modules complete</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
 
-  <div class="panel" id="panels"></div>
+<div class="module-nav" id="mod-nav">
+  <button class="mod-btn active" onclick="showModule(0)" id="nav-0"><i class="ti ti-user" aria-hidden="true"></i> Story <span class="chk" id="chk-0"></span></button>
+  <button class="mod-btn" onclick="showModule(1)" id="nav-1"><i class="ti ti-target" aria-hidden="true"></i> Goals <span class="chk" id="chk-1"></span></button>
+  <button class="mod-btn" onclick="showModule(2)" id="nav-2"><i class="ti ti-book" aria-hidden="true"></i> Program fit <span class="chk" id="chk-2"></span></button>
+  <button class="mod-btn" onclick="showModule(3)" id="nav-3"><i class="ti ti-message-circle" aria-hidden="true"></i> STAR <span class="chk" id="chk-3"></span></button>
+  <button class="mod-btn" onclick="showModule(4)" id="nav-4"><i class="ti ti-help-circle" aria-hidden="true"></i> Questions <span class="chk" id="chk-4"></span></button>
+  <button class="mod-btn" onclick="showModule(5)" id="nav-5"><i class="ti ti-checklist" aria-hidden="true"></i> Interview day <span class="chk" id="chk-5"></span></button>
+  <button class="mod-btn" onclick="showModule(6)" id="nav-6"><i class="ti ti-mail" aria-hidden="true"></i> Post-interview <span class="chk" id="chk-6"></span></button>
+  <button class="mod-btn" onclick="showModule(7)" id="nav-7"><i class="ti ti-file-text" aria-hidden="true"></i> My report</button>
+</div>
+
+<div class="panel" id="panels"></div>
 </div>
 
 <script>
-const state = {
-  specialty: '', story: '', storyFeedback: '',
-  goals: '', goalsFeedback: '',
-  programResearch: '', whyFellow: '', programFit: '', programFitFeedback: '',
-  starSituation: '', starTask: '', starAction: '', starResult: '', starFeedback: '',
-  questionsToAsk: '',
-  commType: 'thankyou',
-  commProgram: '', commInterviewer: '', commHighlight: '', commGoalLink: '',
-  commDraft: '', commFeedback: '',
-  loiProgram: '', loiReason: '', loiUpdate: '', loiDraft: '', loiFeedback: '',
-  completed: [false, false, false, false, false, false, false],
+const S={
+  specialty:'',story:'',storyFB:'',
+  goals:'',goalsFB:'',
+  progResearch:'',whyFellow:'',progFit:'',progFitFB:'',
+  starS:'',starT:'',starA:'',starR:'',starFB:'',
+  questions:'',
+  commType:'thankyou',
+  commInterviewer:'',commProgram:'',commHighlight:'',commGoalLink:'',
+  commDraft:'',commFB:'',
+  loiProgram:'',loiReason:'',loiUpdate:'',loiDraft:'',loiFB:'',
+  done:[false,false,false,false,false,false,false]
 };
 
-let currentModule = 0;
-
-function updateProgress() {
-  const done = state.completed.filter(Boolean).length;
-  const pct = Math.round((done / 7) * 100);
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-pct').textContent = pct + '% complete';
-  for (let i = 0; i < 7; i++) {
-    document.getElementById('chk-' + i).textContent = state.completed[i] ? '✓' : '';
+function updateProgress(){
+  const n=S.done.filter(Boolean).length;
+  const pct=Math.round(n/7*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-pct').textContent=n+' of 7 modules complete';
+  for(let i=0;i<7;i++){
+    document.getElementById('chk-'+i).textContent=S.done[i]?'✓':'';
   }
 }
 
-function showModule(idx) {
-  currentModule = idx;
-  document.querySelectorAll('.mod-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
-  const panel = document.getElementById('panels');
-  if (idx === 7) { panel.innerHTML = renderReport(); return; }
-  const renders = [renderStory, renderGoals, renderProgramFit, renderSTAR, renderQuestions, renderInterviewDay, renderPostInterview];
-  panel.innerHTML = renders[idx]();
-  restoreInputs(idx);
+function showModule(idx){
+  document.querySelectorAll('.mod-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  const p=document.getElementById('panels');
+  const renders=[m0,m1,m2,m3,m4,m5,m6,mReport];
+  p.innerHTML=renders[idx]();
+  restore(idx);
 }
 
-function restoreInputs(idx) {
-  const map = {
-    0: ['specialty','story'], 1: ['goals'],
-    2: ['programResearch','whyFellow','programFit'],
-    3: ['starSituation','starTask','starAction','starResult'],
-    4: ['questionsToAsk'], 5: [],
-    6: ['commProgram','commInterviewer','commHighlight','commGoalLink','loiProgram','loiReason','loiUpdate'],
-  };
-  (map[idx] || []).forEach(k => { const el = document.getElementById(k); if (el && state[k]) el.value = state[k]; });
-  const fbMap = { 0:'storyFeedback', 1:'goalsFeedback', 2:'programFitFeedback', 3:'starFeedback' };
-  if (fbMap[idx] && state[fbMap[idx]]) {
-    const fb = document.getElementById('ai-fb-' + idx);
-    if (fb) { fb.textContent = state[fbMap[idx]]; fb.classList.remove('loading'); }
+function sv(k,id){const e=document.getElementById(id);if(e)S[k]=e.value;}
+
+function restore(idx){
+  const map={0:['specialty','story'],1:['goals'],2:['progResearch','whyFellow','progFit'],
+    3:['starS','starT','starA','starR'],4:['questions'],5:[],
+    6:['commInterviewer','commProgram','commHighlight','commGoalLink','loiProgram','loiReason','loiUpdate']};
+  const idMap={0:['specialty','story'],1:['goals'],2:['progResearch','whyFellow','progFit'],
+    3:['starS','starT','starA','starR'],4:['questions'],5:[],
+    6:['commInterviewer','commProgram','commHighlight','commGoalLink','loiProgram','loiReason','loiUpdate']};
+  (idMap[idx]||[]).forEach(k=>{const e=document.getElementById(k);if(e&&S[k])e.value=S[k];});
+  const fbKeys={0:'storyFB',1:'goalsFB',2:'progFitFB',3:'starFB'};
+  if(fbKeys[idx]&&S[fbKeys[idx]]){
+    const fb=document.getElementById('aifb-'+idx);
+    if(fb){fb.innerHTML=aiBoxContent(S[fbKeys[idx]]);fb.classList.remove('loading');}
   }
-  if (idx === 6) {
-    restoreCommModule();
-  }
+  if(idx===6)restoreComm();
 }
 
-function restoreCommModule() {
-  selectCommType(state.commType || 'thankyou');
-  if (state.commDraft) {
-    const el = document.getElementById('comm-draft-preview');
-    if (el) { el.textContent = state.commDraft; el.style.display = 'block'; }
-  }
-  if (state.commFeedback) {
-    const el = document.getElementById('comm-ai-fb');
-    if (el) { el.textContent = state.commFeedback; el.style.display = 'block'; el.classList.remove('loading'); }
-  }
-  if (state.loiDraft) {
-    const el = document.getElementById('loi-draft-preview');
-    if (el) { el.textContent = state.loiDraft; el.style.display = 'block'; }
-  }
-  if (state.loiFeedback) {
-    const el = document.getElementById('loi-ai-fb');
-    if (el) { el.textContent = state.loiFeedback; el.style.display = 'block'; el.classList.remove('loading'); }
-  }
+function aiBoxContent(txt){
+  return `<div class="ai-box-header"><i class="ti ti-sparkles" aria-hidden="true"></i> Coach feedback</div>${txt}`;
 }
 
-function save(key, elId) {
-  const el = document.getElementById(elId);
-  if (el) state[key] = el.value;
+function restoreComm(){
+  selectComm(S.commType||'thankyou');
+  if(S.commDraft){const e=document.getElementById('comm-preview');if(e){e.textContent=S.commDraft;e.style.display='block';}}
+  if(S.commFB){const e=document.getElementById('comm-fb');if(e){e.innerHTML=aiBoxContent(S.commFB);e.style.display='block';}}
+  if(S.loiDraft){const e=document.getElementById('loi-preview');if(e){e.textContent=S.loiDraft;e.style.display='block';}}
+  if(S.loiFB){const e=document.getElementById('loi-fb');if(e){e.innerHTML=aiBoxContent(S.loiFB);e.style.display='block';}}
 }
 
-async function callClaude(prompt) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: `You are a compassionate, expert fellowship interview coach with deep knowledge of medical training, ACGME fellowship programs, and what fellowship program directors look for in candidates. You coach residents across all specialties. Your tone is warm, encouraging, and practical. You give specific, actionable feedback. Keep responses concise (150-250 words) and easy to read. Use plain text only, no markdown.`,
-      messages: [{ role: 'user', content: prompt }]
-    })
+async function claude(prompt){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:'You are a compassionate, expert fellowship interview coach with deep knowledge of ACGME fellowship programs across all medical specialties. Your tone is warm, encouraging, and specific. Give actionable feedback in plain text, no markdown. Keep responses 150-250 words.',
+      messages:[{role:'user',content:prompt}]})
   });
-  const data = await resp.json();
-  return data.content.map(c => c.text || '').join('');
+  const d=await r.json();
+  return d.content.map(c=>c.text||'').join('');
 }
 
-async function getAIFeedback(idx, prompt, stateKey) {
-  const fbEl = document.getElementById('ai-fb-' + idx);
-  if (!fbEl) return;
-  fbEl.textContent = 'Reviewing your response...';
-  fbEl.classList.add('loading');
-  try {
-    const result = await callClaude(prompt);
-    fbEl.textContent = result;
-    fbEl.classList.remove('loading');
-    state[stateKey] = result;
-    state.completed[idx] = true;
-    updateProgress();
-    document.getElementById('chk-' + idx).textContent = '✓';
-  } catch(e) {
-    fbEl.textContent = 'Could not reach the AI coach. Please check your connection and try again.';
-    fbEl.classList.remove('loading');
+async function getAI(modIdx,prompt,fbKey){
+  const el=document.getElementById('aifb-'+modIdx);
+  if(!el)return;
+  el.style.display='block';
+  el.innerHTML='<div style="color:#8A8070;font-style:italic;font-size:13px;">Reviewing your response...</div>';
+  el.classList.add('loading');
+  try{
+    const result=await claude(prompt);
+    el.innerHTML=aiBoxContent(result);
+    el.classList.remove('loading');
+    S[fbKey]=result;
+    S.done[modIdx]=true;updateProgress();
+    document.getElementById('chk-'+modIdx).textContent='✓';
+  }catch(e){
+    el.innerHTML='<div style="color:#8A8070;font-size:13px;">Could not reach the AI coach. Please try again.</div>';
+    el.classList.remove('loading');
   }
 }
 
-function renderStory() {
-  return `<div class="module-card">
-    <h2><i class="ti ti-user" aria-hidden="true"></i> Module 1: Know your story</h2>
-    <p class="desc">The most important thing you can do before your fellowship interview is know yourself deeply. Program directors want to understand who you are, what drives you, and why you belong in their program. Your personal narrative should be authentic, specific, and memorable.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Think of your story as an answer to "Tell me about yourself" — but tailored for fellowship. It should cover your path to medicine, what drew you to this specialty, and what kind of physician you want to become. Aim for 90 seconds when spoken aloud.</div>
-    <label for="specialty">What specialty fellowship are you applying to?</label>
-    <input type="text" id="specialty" placeholder="e.g., Cardiology, Gastroenterology, Pulmonary/Critical Care..." oninput="save('specialty','specialty')" />
-    <label for="story">Draft your personal narrative (the "tell me about yourself" for fellowship)</label>
-    <textarea id="story" rows="6" placeholder="Write your story here. Consider: What led you to medicine? What experiences during residency confirmed this fellowship is right for you? What patient moments, clinical experiences, or mentors shaped your path? What makes you unique?" oninput="save('story','story')"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="submitStory()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-      <button class="btn" onclick="showModule(1)">Next module →</button>
+function m0(){return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-user" aria-hidden="true"></i><h2>Module 1 — Know your story</h2></div>
+  <p class="card-desc">Your personal narrative is the foundation of every fellowship interview. Program directors want to understand who you are, what drives you, and why you belong in their program. Your story should be authentic, specific, and memorable — and landable in 90 seconds.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Cover your path to medicine, what drew you to this specialty during residency, and what kind of physician you're becoming. Specificity is what separates compelling stories from forgettable ones.</span></div>
+  <div class="field-group">
+    <div class="field-group-title">About you</div>
+    <label for="specialty">Fellowship specialty</label>
+    <input type="text" id="specialty" placeholder="e.g., Cardiology, Gastroenterology, Pulmonary/Critical Care..." oninput="sv('specialty','specialty')" />
+    <label for="story">Your personal narrative</label>
+    <textarea id="story" rows="6" placeholder="What led you to medicine? What residency experiences confirmed this fellowship is right for you? What patient moments, mentors, or clinical experiences shaped your path? What makes you unique?" oninput="sv('story','story')"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="sub0()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+    <button class="btn btn-black" onclick="showModule(1)">Next module →</button>
+  </div>
+  <div class="ai-box" id="aifb-0" style="display:none"></div>
+</div>`;}
+
+async function sub0(){
+  sv('specialty','specialty');sv('story','story');
+  if(!S.story.trim()){alert('Please write your personal narrative first.');return;}
+  await getAI(0,`A resident applying to ${S.specialty||'medical'} fellowship has written their personal narrative. Give specific coaching feedback: authenticity, specificity, story arc, how it lands with a program director, and 2-3 concrete suggestions to strengthen it.\n\n${S.story}`,'storyFB');
+}
+
+function m1(){return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-target" aria-hidden="true"></i><h2>Module 2 — Define your career goals</h2></div>
+  <p class="card-desc">"What are your career goals?" is one of the most common fellowship interview questions. Program directors want to see that you've thought seriously about where this fellowship fits in your trajectory — and that your goals align with what their program offers.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Be specific about short-term goals (skills to master during fellowship) and long-term goals (academic vs. community, research, leadership). Vague answers miss a key opportunity to differentiate yourself.</span></div>
+  <div class="field-group">
+    <div class="field-group-title">Career vision</div>
+    <label for="goals">Short-term and long-term career goals</label>
+    <textarea id="goals" rows="7" placeholder="Short-term (during/after fellowship): What skills to master? What training do you need?&#10;&#10;Long-term (5-10 years): Academic medicine? Community practice? Research? Leadership? Quality improvement? Specific patient population?" oninput="sv('goals','goals')"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="sub1()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+    <button class="btn btn-black" onclick="showModule(2)">Next module →</button>
+  </div>
+  <div class="ai-box" id="aifb-1" style="display:none"></div>
+</div>`;}
+
+async function sub1(){
+  sv('goals','goals');
+  if(!S.goals.trim()){alert('Please write your career goals first.');return;}
+  await getAI(1,`A ${S.specialty||'medical'} fellowship applicant has written their career goals. Feedback: Are they clear and realistic? Do they show self-awareness? Too vague or too narrow? How might a program director react? 2-3 ways to strengthen them.\n\n${S.goals}`,'goalsFB');
+}
+
+function m2(){return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-book" aria-hidden="true"></i><h2>Module 3 — Program fit & research</h2></div>
+  <p class="card-desc">Interviewers will ask why you want their specific program. Generic answers are a red flag. Demonstrating deep research and articulating specific reasons for your interest signals professionalism and genuine enthusiasm.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Research faculty publications, case volume, unique training tracks, and culture. The best answers name specific faculty, research, or resources — not just "great reputation."</span></div>
+  <div class="field-group">
+    <div class="field-group-title">Program research</div>
+    <label for="progResearch">2-3 specific things that attracted you to your target programs</label>
+    <textarea id="progResearch" rows="3" placeholder="e.g., Dr. Smith's research on HFpEF aligns with my interest in heart failure... The advanced imaging track... Case volume of X procedures per fellow..." oninput="sv('progResearch','progResearch')"></textarea>
+    <label for="whyFellow">Why this fellowship, why now?</label>
+    <textarea id="whyFellow" rows="3" placeholder="What specific skills or training can only be gained through fellowship?" oninput="sv('whyFellow','whyFellow')"></textarea>
+  </div>
+  <div class="field-group">
+    <div class="field-group-title">Interview answer draft</div>
+    <label for="progFit">Draft: "Why are you interested in our program specifically?"</label>
+    <textarea id="progFit" rows="4" placeholder="Write a sample answer you'd give in an interview. Be specific — mention faculty, research, curriculum, or culture." oninput="sv('progFit','progFit')"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="sub2()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+    <button class="btn btn-black" onclick="showModule(3)">Next module →</button>
+  </div>
+  <div class="ai-box" id="aifb-2" style="display:none"></div>
+</div>`;}
+
+async function sub2(){
+  sv('progResearch','progResearch');sv('whyFellow','whyFellow');sv('progFit','progFit');
+  if(!S.progFit.trim()){alert('Please draft your "why our program" answer first.');return;}
+  await getAI(2,`A ${S.specialty||'medical'} fellowship applicant drafted an answer to "Why are you interested in our program?"\n\nProgram research: ${S.progResearch}\nWhy fellowship: ${S.whyFellow}\nSample answer: ${S.progFit}\n\nFeedback: Does it feel genuine and well-researched? Specific enough to stand out? Connected to their goals? 2-3 suggestions.`,'progFitFB');
+}
+
+function m3(){return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-message-circle" aria-hidden="true"></i><h2>Module 4 — STAR method practice</h2></div>
+  <p class="card-desc">Behavioral questions ("Tell me about a time when...") are very common in fellowship interviews. The STAR method gives structure to your clinical stories so they are memorable and demonstrate clear competencies.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Choose a story showing growth and self-awareness — not just a win. The best STAR stories have genuine challenge, a thoughtful response, and a reflection on what you learned.</span></div>
+  <div class="field-group">
+    <div class="field-group-title">Practice question: "Tell me about a challenging situation during residency and how you handled it."</div>
+    <div class="star-grid" style="margin-top:4px;">
+      <div class="star-row"><span class="star-pill sp-s">Situation</span><textarea id="starS" rows="2" placeholder="What was the context? When and where did this happen?" oninput="sv('starS','starS')"></textarea></div>
+      <div class="star-row"><span class="star-pill sp-t">Task</span><textarea id="starT" rows="2" placeholder="What was your role and responsibility?" oninput="sv('starT','starT')"></textarea></div>
+      <div class="star-row"><span class="star-pill sp-a">Action</span><textarea id="starA" rows="3" placeholder="What specific steps did YOU take? (Focus on your individual actions)" oninput="sv('starA','starA')"></textarea></div>
+      <div class="star-row"><span class="star-pill sp-r">Result</span><textarea id="starR" rows="2" placeholder="What was the outcome? What did you learn? What would you do differently?" oninput="sv('starR','starR')"></textarea></div>
     </div>
-    <div class="ai-response" id="ai-fb-0" style="display:none"></div>
-  </div>`;
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="sub3()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+    <button class="btn btn-black" onclick="showModule(4)">Next module →</button>
+  </div>
+  <div class="ai-box" id="aifb-3" style="display:none"></div>
+</div>`;}
+
+async function sub3(){
+  sv('starS','starS');sv('starT','starT');sv('starA','starA');sv('starR','starR');
+  if(!S.starA.trim()){alert('Please fill in at least the Action section first.');return;}
+  await getAI(3,`A ${S.specialty||'medical'} fellowship applicant drafted a STAR response. Feedback on each component and overall story — is it concrete, clinically relevant, showing individual initiative, demonstrating growth? 2-3 specific suggestions.\n\nSituation: ${S.starS}\nTask: ${S.starT}\nAction: ${S.starA}\nResult: ${S.starR}`,'starFB');
 }
 
-async function submitStory() {
-  save('specialty','specialty'); save('story','story');
-  if (!state.story.trim()) { alert('Please write your personal narrative first.'); return; }
-  document.getElementById('ai-fb-0').style.display = 'block';
-  await getAIFeedback(0, `A resident applying to ${state.specialty || 'a medical'} fellowship has written their personal narrative. Please give specific, constructive coaching feedback on the following draft. Evaluate: authenticity and specificity, whether it communicates genuine motivation for the specialty, whether it tells a compelling story arc, how it might land with a program director, and 2-3 concrete suggestions to strengthen it. Here is their draft:\n\n${state.story}`, 'storyFeedback');
+function m4(){
+  const qs=['What is the typical schedule for a fellow?','How do you support fellows pursuing research?','What does the program consider its greatest strength?','How are fellows evaluated and given feedback?','Where are recent graduates working now?','What leadership or QI opportunities exist for fellows?','How does the program support fellow well-being?','What makes your program unique in this specialty?'];
+  return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-help-circle" aria-hidden="true"></i><h2>Module 5 — Questions to ask programs</h2></div>
+  <p class="card-desc">The interview is a two-way evaluation. Asking thoughtful, specific questions signals engagement and helps you genuinely assess fit. Prepare 4-6 questions per program, personalized to what you've learned about each one.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Avoid questions answered clearly on the program website. The best questions show you've done research and are thinking deeply about your training experience.</span></div>
+  <div class="field-group">
+    <div class="field-group-title">Sample questions — tap to add</div>
+    <div style="margin-top:4px;">${qs.map(q=>`<span class="q-chip" onclick="addQ('${q.replace(/'/g,"\\'")}')">${q}</span>`).join('')}</div>
+  </div>
+  <div class="field-group">
+    <div class="field-group-title">Your question list</div>
+    <textarea id="questions" rows="7" placeholder="Write or paste the questions you plan to ask. Personalize some to specific programs..." oninput="sv('questions','questions')"></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-gold" onclick="sub4()"><i class="ti ti-check" aria-hidden="true"></i> Save & get feedback</button>
+    <button class="btn btn-black" onclick="showModule(5)">Next module →</button>
+  </div>
+  <div class="ai-box" id="aifb-4" style="display:none"></div>
+</div>`;}
+
+function addQ(q){
+  const e=document.getElementById('questions');
+  if(e){e.value=(e.value.trim()?e.value.trim()+'\n• ':'• ')+q;sv('questions','questions');}
 }
 
-function renderGoals() {
-  return `<div class="module-card">
-    <h2><i class="ti ti-target" aria-hidden="true"></i> Module 2: Define your career goals</h2>
-    <p class="desc">One of the most common fellowship interview questions is "What are your career goals?" Program directors want to see that you've thought seriously about where this fellowship fits in your career trajectory, and that your goals align with what their program offers.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Be specific about short-term goals (completing fellowship, developing technical skills, building your clinical toolkit) and long-term goals (academic vs. community practice, research interests, leadership aspirations). Vague answers like "I want to be a good doctor" miss an opportunity to differentiate yourself.</div>
-    <label for="goals">What are your short-term and long-term career goals in ${state.specialty || 'your specialty'}?</label>
-    <textarea id="goals" rows="7" placeholder="Short-term (during/immediately after fellowship): What skills do you want to master? What kind of training do you need?&#10;&#10;Long-term (5-10 years): Academic medicine? Community practice? Research? Leadership? Quality improvement? Specific patient population?" oninput="save('goals','goals')"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="submitGoals()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-      <button class="btn" onclick="showModule(2)">Next module →</button>
-    </div>
-    <div class="ai-response" id="ai-fb-1" style="display:none"></div>
-  </div>`;
+async function sub4(){
+  sv('questions','questions');
+  const el=document.getElementById('aifb-4');
+  el.style.display='block';
+  if(S.questions.trim()){
+    el.innerHTML='<div style="color:#8A8070;font-style:italic;font-size:13px;">Reviewing your questions...</div>';
+    el.classList.add('loading');
+    try{
+      const r=await claude(`A ${S.specialty||'medical'} fellowship applicant prepared these interview questions. Are they strong and thoughtful? Do they show engagement? Suggest 1-2 additional questions they might overlook.\n\n${S.questions}`);
+      el.innerHTML=aiBoxContent(r);el.classList.remove('loading');
+    }catch(e){el.innerHTML='<div style="color:#8A8070;">Questions saved!</div>';el.classList.remove('loading');}
+  }else{el.innerHTML='<div style="color:#8A8070;font-size:13px;">Add questions using the chips above or write your own.</div>';}
+  S.done[4]=true;updateProgress();document.getElementById('chk-4').textContent='✓';
 }
 
-async function submitGoals() {
-  save('goals','goals');
-  if (!state.goals.trim()) { alert('Please write your career goals first.'); return; }
-  document.getElementById('ai-fb-1').style.display = 'block';
-  await getAIFeedback(1, `A ${state.specialty || 'medical'} fellowship applicant has written out their career goals. Give specific coaching feedback: Are the goals clear and realistic? Do they reflect genuine self-awareness? Are they too vague or too narrowly specific? How might a program director react? Suggest 2-3 ways to strengthen how they communicate these goals in an interview. Here are their goals:\n\n${state.goals}`, 'goalsFeedback');
-}
-
-function renderProgramFit() {
-  return `<div class="module-card">
-    <h2><i class="ti ti-book" aria-hidden="true"></i> Module 3: Program fit & research</h2>
-    <p class="desc">Interviewers will ask why you want their specific program. Generic answers are a red flag. Demonstrating that you've researched the program and can articulate specific reasons for your interest signals professionalism and genuine enthusiasm.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Research each program's website, faculty publications, case volume, unique training opportunities, and culture. Connect what the program offers specifically to your personal goals. The best answers name specific faculty, tracks, or resources — not just "great reputation."</div>
-    <label for="programResearch">What do you know about your target programs? (List 2-3 specific things that attracted you)</label>
-    <textarea id="programResearch" rows="4" placeholder="e.g., Dr. Smith's research on HFpEF aligns with my interest in heart failure... The advanced imaging track... Case volume of X procedures per fellow..." oninput="save('programResearch','programResearch')"></textarea>
-    <label for="whyFellow">Why this fellowship, why now? What does fellowship training offer that you can't get elsewhere?</label>
-    <textarea id="whyFellow" rows="3" placeholder="What specific skills, experiences, or training can only be gained through fellowship?" oninput="save('whyFellow','whyFellow')"></textarea>
-    <label for="programFit">Draft your answer to: "Why are you interested in our program specifically?"</label>
-    <textarea id="programFit" rows="4" placeholder="Write a sample answer you'd give in an interview. Be specific — mention faculty, research, curriculum, or culture." oninput="save('programFit','programFit')"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="submitProgramFit()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-      <button class="btn" onclick="showModule(3)">Next module →</button>
-    </div>
-    <div class="ai-response" id="ai-fb-2" style="display:none"></div>
-  </div>`;
-}
-
-async function submitProgramFit() {
-  save('programResearch','programResearch'); save('whyFellow','whyFellow'); save('programFit','programFit');
-  if (!state.programFit.trim()) { alert('Please draft your "why our program" answer first.'); return; }
-  document.getElementById('ai-fb-2').style.display = 'block';
-  await getAIFeedback(2, `A ${state.specialty || 'medical'} fellowship applicant is preparing to answer "Why are you interested in our program?" Here is what they've written:\n\nProgram research notes: ${state.programResearch}\n\nWhy fellowship now: ${state.whyFellow}\n\nSample answer: ${state.programFit}\n\nPlease give specific coaching feedback: Does this answer feel genuine and well-researched? Is it specific enough to stand out? Does it connect the program's offerings to the applicant's personal goals? Provide 2-3 concrete suggestions to make this answer more compelling to a program director.`, 'programFitFeedback');
-}
-
-function renderSTAR() {
-  return `<div class="module-card">
-    <h2><i class="ti ti-message-circle" aria-hidden="true"></i> Module 4: STAR method practice</h2>
-    <p class="desc">Behavioral interview questions ("Tell me about a time when...") are very common in fellowship interviews. The STAR method helps you give structured, memorable answers that demonstrate your competencies through specific clinical stories.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Choose a story that shows growth, self-awareness, or leadership — not just a win. The best STAR stories have a moment of genuine challenge, a thoughtful response, and a reflection on what you learned. Avoid generic examples; make it specific to your clinical experience.</div>
-    <p style="font-size:13px; color: var(--color-text-secondary); margin-bottom: 12px;">Practice with a behavioral question: <em>"Tell me about a challenging situation you encountered during residency and how you handled it."</em></p>
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <div class="star-item"><span class="star-label s-label">Situation</span><textarea id="starSituation" rows="2" placeholder="What was the context? When and where did this happen?" oninput="save('starSituation','starSituation')"></textarea></div>
-      <div class="star-item"><span class="star-label t-label">Task</span><textarea id="starTask" rows="2" placeholder="What was your role and responsibility in this situation?" oninput="save('starTask','starTask')"></textarea></div>
-      <div class="star-item"><span class="star-label a-label">Action</span><textarea id="starAction" rows="3" placeholder="What specific steps did YOU take? (Focus on your individual actions, not the team's)" oninput="save('starAction','starAction')"></textarea></div>
-      <div class="star-item"><span class="star-label r-label">Result</span><textarea id="starResult" rows="2" placeholder="What was the outcome? What did you learn? What would you do differently?" oninput="save('starResult','starResult')"></textarea></div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="submitSTAR()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-      <button class="btn" onclick="showModule(4)">Next module →</button>
-    </div>
-    <div class="ai-response" id="ai-fb-3" style="display:none"></div>
-  </div>`;
-}
-
-async function submitSTAR() {
-  save('starSituation','starSituation'); save('starTask','starTask'); save('starAction','starAction'); save('starResult','starResult');
-  if (!state.starAction.trim()) { alert('Please fill in at least the Action section of your STAR story.'); return; }
-  document.getElementById('ai-fb-3').style.display = 'block';
-  await getAIFeedback(3, `A ${state.specialty || 'medical'} fellowship applicant has drafted a STAR-format behavioral interview response. Please give specific coaching feedback on each component and the overall story. Evaluate whether: the situation is concrete and clinically relevant, the task is clearly defined and their role is distinct, the actions show individual initiative and thoughtful decision-making, the result demonstrates growth or self-awareness, and the story would be memorable to a program director. Give 2-3 specific suggestions.\n\nSituation: ${state.starSituation}\nTask: ${state.starTask}\nAction: ${state.starAction}\nResult: ${state.starResult}`, 'starFeedback');
-}
-
-function renderQuestions() {
-  const sampleQs = ['What is the typical day-to-day schedule for a fellow?','How do you support fellows who want to pursue research?','What does the program consider its greatest strength?','How are fellows evaluated and given feedback?','What are recent graduates doing now, and where are they working?','What opportunities exist for leadership or quality improvement projects?','How does the program support fellows\' well-being?','What makes your program unique compared to others in this specialty?'];
-  return `<div class="module-card">
-    <h2><i class="ti ti-help-circle" aria-hidden="true"></i> Module 5: Questions to ask programs</h2>
-    <p class="desc">Asking thoughtful questions signals engagement and helps you evaluate fit. The interview is a two-way street — you're also choosing whether this program is right for you. Prepare 4-6 questions per program, tailored to what you've learned about each one.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Avoid questions whose answers are clearly on the program website. The best questions show you've done research and are thinking deeply about your training experience. Click any sample question below to add it to your list.</div>
-    <p style="font-size:13px; color: var(--color-text-secondary); margin-bottom: 8px;">Sample questions to consider:</p>
-    <div style="margin-bottom: 1rem;">${sampleQs.map(q => `<span class="question-chip" onclick="addQuestion('${q.replace(/'/g,"\\'")}')">${q}</span>`).join('')}</div>
-    <label for="questionsToAsk">Your curated list of questions to ask:</label>
-    <textarea id="questionsToAsk" rows="8" placeholder="Write or paste the questions you plan to ask. Try to personalize some to specific programs..." oninput="save('questionsToAsk','questionsToAsk')"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="completeQuestions()"><i class="ti ti-check" aria-hidden="true"></i> Save my questions ↗</button>
-      <button class="btn" onclick="showModule(5)">Next module →</button>
-    </div>
-    <div class="ai-response" id="ai-fb-4" style="display:none"></div>
-  </div>`;
-}
-
-function addQuestion(q) {
-  const el = document.getElementById('questionsToAsk');
-  if (el) { el.value = (el.value.trim() ? el.value.trim() + '\n• ' : '• ') + q; save('questionsToAsk','questionsToAsk'); }
-}
-
-async function completeQuestions() {
-  save('questionsToAsk','questionsToAsk');
-  document.getElementById('ai-fb-4').style.display = 'block';
-  const fbEl = document.getElementById('ai-fb-4');
-  if (state.questionsToAsk.trim()) {
-    fbEl.textContent = 'Reviewing your questions...'; fbEl.classList.add('loading');
-    try {
-      const result = await callClaude(`A ${state.specialty || 'medical'} fellowship applicant has prepared these questions to ask programs during interviews. Give brief feedback: Are these strong, thoughtful questions? Do they show genuine engagement? Suggest 1-2 additional questions they might consider based on what fellowship applicants typically overlook. Their questions:\n\n${state.questionsToAsk}`);
-      fbEl.textContent = result; fbEl.classList.remove('loading');
-    } catch(e) { fbEl.textContent = 'Questions saved!'; fbEl.classList.remove('loading'); }
-  } else { fbEl.textContent = 'No questions added yet — use the sample questions above or write your own.'; fbEl.classList.remove('loading'); }
-  state.completed[4] = true; updateProgress(); document.getElementById('chk-4').textContent = '✓';
-}
-
-function renderInterviewDay() {
-  const checks = [
-    { cat: 'Logistics', items: ['Confirmed interview format (virtual, in-person, or hybrid)','Know the platform and tested tech (for virtual)','Professional attire chosen and ready','Route planned or login info saved','Aim to arrive/log in 10-15 minutes early'] },
-    { cat: 'Content prep', items: ['Can speak to every item on your CV — don\'t let anything be a surprise','Practiced "Tell me about yourself" out loud','Prepared 2-3 STAR stories for behavioral questions','Researched each specific program on your schedule','Prepared 5 thoughtful questions to ask'] },
-    { cat: 'Professionalism', items: ['Treat everyone with courtesy — coordinators, residents, staff','If virtual: neutral, well-lit background; camera at eye level','Take notes on each program immediately after — programs blur together','Send thank-you emails within 24 hours','Keep social media professional throughout interview season'] },
-    { cat: 'Mindset', items: ['Remember: you\'ve earned this interview — they want to know you','Prepare, don\'t rehearse — be conversational, not scripted','Be authentic — the best interviews feel like conversations','It\'s also your evaluation of them — ask what you genuinely want to know'] }
+function m5(){
+  const sections=[
+    {title:'Logistics',items:['Confirmed interview format — virtual, in-person, or hybrid','Platform tested and tech confirmed (for virtual)','Professional attire chosen and ready','Route planned or login info saved; arrive/log in 10-15 min early']},
+    {title:'Content prep',items:['Can speak to every item on your CV — no surprises','Practiced "tell me about yourself" out loud','Prepared 2-3 STAR stories for behavioral questions','Researched each program specifically on your schedule','Prepared 5 thoughtful questions to ask']},
+    {title:'Professionalism',items:['Treat everyone with courtesy — coordinators, residents, and staff','Virtual: neutral background, good lighting, camera at eye level','Take notes on each program immediately after — they blur together','Send thank-you emails within 24 hours','Keep social media professional throughout interview season']},
+    {title:'Mindset',items:['You earned this interview — they genuinely want to know you','Prepare, don\'t rehearse — be conversational, not scripted','Be authentic — the best interviews feel like real conversations','This is your evaluation of them too — ask what you truly want to know']}
   ];
-  return `<div class="module-card">
-    <h2><i class="ti ti-checklist" aria-hidden="true"></i> Module 6: Interview day readiness</h2>
-    <p class="desc">The best-prepared candidates are those who can walk into an interview feeling grounded, confident, and genuinely curious. Use this checklist to make sure nothing falls through the cracks.</p>
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> After each interview, immediately jot notes on what stood out — clinical environment, fellow culture, faculty approachability. These notes will be invaluable when it's time to create your rank order list.</div>
-    ${checks.map(s => `<p style="font-size:12px; font-weight:500; color: var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.05em; margin: 1rem 0 6px;">${s.cat}</p>${s.items.map(item => `<div class="checklist-item"><i class="ti ti-circle-check check-icon" style="color: var(--color-text-success)" aria-hidden="true"></i><span>${item}</span></div>`).join('')}`).join('')}
-    <div class="btn-row" style="margin-top: 1.5rem;">
-      <button class="btn btn-success" onclick="completeInterviewDay()"><i class="ti ti-check" aria-hidden="true"></i> Mark complete</button>
-      <button class="btn btn-primary" onclick="showModule(6)"><i class="ti ti-mail" aria-hidden="true"></i> Next: post-interview communications →</button>
-    </div>
-  </div>`;
+  return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-checklist" aria-hidden="true"></i><h2>Module 6 — Interview day readiness</h2></div>
+  <p class="card-desc">The best-prepared candidates walk in feeling grounded, confident, and genuinely curious. Use this checklist to make sure nothing falls through the cracks before your first interview.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>After each interview, immediately jot notes on what stood out — clinical environment, fellow culture, faculty approachability. These notes are invaluable when building your rank order list.</span></div>
+  <div class="field-group">
+    ${sections.map(s=>`<div class="checklist-section-title">${s.title}</div>${s.items.map(item=>`<div class="check-row"><i class="ti ti-circle-check" aria-hidden="true"></i><span>${item}</span></div>`).join('')}`).join('')}
+  </div>
+  <div class="btn-row" style="margin-top:1rem;">
+    <button class="btn btn-success" onclick="completeM5()"><i class="ti ti-check" aria-hidden="true"></i> Mark complete</button>
+    <button class="btn btn-black" onclick="showModule(6)">Next: post-interview →</button>
+  </div>
+</div>`;}
+
+function completeM5(){S.done[5]=true;updateProgress();document.getElementById('chk-5').textContent='✓';showModule(6);}
+
+function selectComm(type){
+  S.commType=type;
+  document.querySelectorAll('.ct-card').forEach(c=>c.classList.toggle('sel',c.dataset.type===type));
+  ['thankyou','loi','withdraw'].forEach(t=>{
+    const el=document.getElementById('sec-'+t);if(el)el.style.display=t===type?'block':'none';
+  });
 }
 
-function completeInterviewDay() {
-  state.completed[5] = true; updateProgress(); document.getElementById('chk-5').textContent = '✓';
-  showModule(6);
-}
+function m6(){return `<div class="section-card gold-top">
+  <div class="card-heading"><i class="ti ti-mail" aria-hidden="true"></i><h2>Module 7 — Post-interview communications</h2></div>
+  <p class="card-desc">What you do after the interview matters. Thoughtful, timely communications reinforce a positive impression and — in a competitive field — can make a meaningful difference. This module covers all three key communication types.</p>
+  <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Every post-interview communication is an extension of your professional identity. Keep messages warm, concise, and genuine. Never send a generic copy-paste — program coordinators and faculty notice.</span></div>
 
-function selectCommType(type) {
-  state.commType = type;
-  document.querySelectorAll('.comm-type-card').forEach(c => c.classList.toggle('selected', c.dataset.type === type));
-  const thankSection = document.getElementById('thankyou-section');
-  const loiSection = document.getElementById('loi-section');
-  const withdrawSection = document.getElementById('withdraw-section');
-  if (thankSection) thankSection.style.display = type === 'thankyou' ? 'block' : 'none';
-  if (loiSection) loiSection.style.display = type === 'loi' ? 'block' : 'none';
-  if (withdrawSection) withdrawSection.style.display = type === 'withdraw' ? 'block' : 'none';
-}
+  <div class="field-group">
+    <div class="field-group-title">Post-interview timeline</div>
+    <div class="timeline-item"><div class="tl-badge tl-b1">24h</div><div class="tl-text"><div class="tl-t">Send thank-you notes</div><div class="tl-d">Email each interviewer individually within 24 hours. Reference something specific from your conversation.</div></div></div>
+    <div class="timeline-item"><div class="tl-badge tl-b2">1-2w</div><div class="tl-text"><div class="tl-t">Letter of interest</div><div class="tl-d">If a program is your top choice, a well-timed letter signals commitment — especially after you've interviewed broadly.</div></div></div>
+    <div class="timeline-item"><div class="tl-badge tl-b3">ROL</div><div class="tl-text"><div class="tl-t">Withdrawal (if needed)</div><div class="tl-d">If you decide not to rank a program, a brief professional withdrawal is a courtesy that protects your reputation.</div></div></div>
+  </div>
 
-function renderPostInterview() {
-  return `<div class="module-card">
-    <h2><i class="ti ti-mail" aria-hidden="true"></i> Module 7: Post-interview communications</h2>
-    <p class="desc">What you do after the interview matters. Thoughtful, timely communications can reinforce a positive impression, express continued interest, and — in a competitive field — make a meaningful difference. This module covers three key post-interview communication types.</p>
-
-    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>Coach's tip:</strong> Every communication after an interview is an extension of your professional identity. Keep all messages warm but concise, error-free, and genuine. Never send a generic copy-paste — program coordinators and faculty notice.</div>
-
-    <p style="font-size:13px; font-weight:500; color: var(--color-text-secondary); margin-bottom: 8px;">Post-interview timeline at a glance:</p>
-    <div style="margin-bottom: 1.25rem;">
-      <div class="timeline-row"><div class="timeline-dot dot-info">24h</div><div class="timeline-content"><div class="tl-title">Send thank-you notes</div><div class="tl-desc">Email each interviewer individually within 24 hours. Personalize each one with something specific from your conversation.</div></div></div>
-      <div class="timeline-row"><div class="timeline-dot dot-warn">1-2w</div><div class="timeline-content"><div class="tl-title">Letter of intent / continued interest</div><div class="tl-desc">If a program is your top choice or near-top, a well-timed letter of interest can signal commitment — especially after you've interviewed broadly.</div></div></div>
-      <div class="timeline-row"><div class="timeline-dot dot-success">ROL</div><div class="timeline-content"><div class="tl-title">Rank order list period</div><div class="tl-desc">If you decide not to rank a program, a brief, professional withdrawal email preserves your reputation and is a courtesy to the program.</div></div></div>
+  <div class="field-group">
+    <div class="field-group-title">Choose communication type</div>
+    <div class="comm-toggle" style="margin-top:8px;">
+      <div class="ct-card sel" data-type="thankyou" onclick="selectComm('thankyou')"><div class="ct-icon"><i class="ti ti-heart" aria-hidden="true"></i></div><div class="ct-title">Thank-you note</div><div class="ct-sub">Send within 24 hrs</div></div>
+      <div class="ct-card" data-type="loi" onclick="selectComm('loi')"><div class="ct-icon"><i class="ti ti-star" aria-hidden="true"></i></div><div class="ct-title">Letter of interest</div><div class="ct-sub">Signal top choice</div></div>
+      <div class="ct-card" data-type="withdraw" onclick="selectComm('withdraw')"><div class="ct-icon"><i class="ti ti-x" aria-hidden="true"></i></div><div class="ct-title">Withdrawal</div><div class="ct-sub">Exit gracefully</div></div>
     </div>
+  </div>
 
-    <p style="font-size:13px; font-weight:500; color: var(--color-text-secondary); margin-bottom: 8px;">Choose the communication type to work on:</p>
-    <div class="comm-type-row">
-      <div class="comm-type-card selected" data-type="thankyou" onclick="selectCommType('thankyou')"><div class="ct-title"><i class="ti ti-heart" aria-hidden="true"></i> Thank-you note</div><div class="ct-sub">Send within 24 hrs</div></div>
-      <div class="comm-type-card" data-type="loi" onclick="selectCommType('loi')"><div class="ct-title"><i class="ti ti-star" aria-hidden="true"></i> Letter of interest</div><div class="ct-sub">Signal top-choice intent</div></div>
-      <div class="comm-type-card" data-type="withdraw" onclick="selectCommType('withdraw')"><div class="ct-title"><i class="ti ti-x" aria-hidden="true"></i> Withdrawal</div><div class="ct-sub">Withdraw professionally</div></div>
-    </div>
-
-    <div id="thankyou-section">
-      <div class="warn-box"><i class="ti ti-clock" aria-hidden="true"></i> <strong>Timing:</strong> Send within 24 hours of your interview — ideally the same evening. A delayed thank-you loses impact and can signal low interest.</div>
-      <label for="commInterviewer">Interviewer's name and title (e.g., "Dr. Jane Smith, Program Director")</label>
-      <input type="text" id="commInterviewer" placeholder="Dr. [Name], [Role]" oninput="save('commInterviewer','commInterviewer')" />
+  <div id="sec-thankyou">
+    <div class="warn-box"><i class="ti ti-clock" aria-hidden="true"></i><span>Send within 24 hours of your interview — ideally the same evening. A delayed thank-you loses impact and can signal low interest.</span></div>
+    <div class="field-group">
+      <div class="field-group-title">Thank-you note details</div>
+      <label for="commInterviewer">Interviewer name and title</label>
+      <input type="text" id="commInterviewer" placeholder="Dr. [Name], Program Director" oninput="sv('commInterviewer','commInterviewer')" />
       <label for="commProgram">Program name</label>
-      <input type="text" id="commProgram" placeholder="e.g., University Hospital ${state.specialty || 'Fellowship'} Program" oninput="save('commProgram','commProgram')" />
-      <label for="commHighlight">Something specific and memorable from your conversation with this interviewer</label>
-      <textarea id="commHighlight" rows="2" placeholder="e.g., our discussion about the program's approach to advanced heart failure cases, or Dr. Smith's research on minimally invasive techniques..." oninput="save('commHighlight','commHighlight')"></textarea>
-      <label for="commGoalLink">One sentence connecting this program to your specific career goals</label>
-      <textarea id="commGoalLink" rows="2" placeholder="e.g., the program's robust research infrastructure aligns perfectly with my goal of pursuing an academic career in interventional cardiology..." oninput="save('commGoalLink','commGoalLink')"></textarea>
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="generateThankYou()"><i class="ti ti-sparkles" aria-hidden="true"></i> Draft my thank-you note ↗</button>
-      </div>
-      <div class="draft-preview" id="comm-draft-preview" style="display:none"></div>
-      <div class="btn-row" id="comm-refine-row" style="display:none">
-        <button class="btn btn-primary" onclick="getFeedbackThankYou()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-        <button class="btn" onclick="copyDraft('comm-draft-preview')"><i class="ti ti-copy" aria-hidden="true"></i> Copy draft</button>
-      </div>
-      <div class="ai-response" id="comm-ai-fb" style="display:none"></div>
+      <input type="text" id="commProgram" placeholder="e.g., University Hospital Fellowship Program" oninput="sv('commProgram','commProgram')" />
+      <label for="commHighlight">Something specific and memorable from your conversation</label>
+      <textarea id="commHighlight" rows="2" placeholder="e.g., our discussion about the program's approach to advanced heart failure cases, or Dr. Smith's research on minimally invasive techniques..." oninput="sv('commHighlight','commHighlight')"></textarea>
+      <label for="commGoalLink">One sentence connecting this program to your career goals</label>
+      <textarea id="commGoalLink" rows="2" placeholder="e.g., the program's robust research infrastructure aligns perfectly with my goal of pursuing an academic career in interventional cardiology..." oninput="sv('commGoalLink','commGoalLink')"></textarea>
     </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="genTY()"><i class="ti ti-sparkles" aria-hidden="true"></i> Draft my thank-you note</button>
+    </div>
+    <div class="draft-preview" id="comm-preview" style="display:none"></div>
+    <div class="btn-row" id="ty-refine" style="display:none">
+      <button class="btn btn-black" onclick="fbTY()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+      <button class="btn" onclick="copyEl('comm-preview')"><i class="ti ti-copy" aria-hidden="true"></i> Copy draft</button>
+    </div>
+    <div class="ai-box" id="comm-fb" style="display:none"></div>
+  </div>
 
-    <div id="loi-section" style="display:none">
-      <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> A letter of interest (LOI) — also called a letter of intent for your absolute top choice — communicates continued enthusiasm after your interviews. It should be genuine, specific, and sent after you've completed most of your interviews so you can honestly assess your preferences.</div>
-      <div class="warn-box"><i class="ti ti-alert-triangle" aria-hidden="true"></i> <strong>Important:</strong> Only send a true "letter of intent" (stating a program is your #1 choice) to one program. Sending LOIs to multiple programs stating each is your top choice is considered unprofessional and can damage your reputation.</div>
+  <div id="sec-loi" style="display:none">
+    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>A letter of interest communicates continued enthusiasm after interviews. It should be genuine, specific, and sent after you've completed most interviews so you can honestly assess your preferences.</span></div>
+    <div class="warn-box"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span>Only send a true "letter of intent" (stating you will rank a program #1) to one program. Sending this to multiple programs is considered unprofessional and can damage your reputation.</span></div>
+    <div class="field-group">
+      <div class="field-group-title">Letter of interest details</div>
       <label for="loiProgram">Program name</label>
-      <input type="text" id="loiProgram" placeholder="e.g., University Hospital ${state.specialty || 'Fellowship'} Program" oninput="save('loiProgram','loiProgram')" />
-      <label for="loiReason">Why is this program your top choice? (Be specific — mention faculty, resources, curriculum, culture)</label>
-      <textarea id="loiReason" rows="3" placeholder="e.g., Dr. Thompson's mentorship approach, the dedicated research year, the program's expertise in complex cases, the collegial fellow culture I observed..." oninput="save('loiReason','loiReason')"></textarea>
-      <label for="loiUpdate">Any updates since your application? (new research, publications, achievements — optional)</label>
-      <textarea id="loiUpdate" rows="2" placeholder="e.g., I recently submitted a manuscript on... / I've been selected to present at... (leave blank if none)" oninput="save('loiUpdate','loiUpdate')"></textarea>
-      <div class="btn-row">
-        <button class="btn btn-primary" onclick="generateLOI()"><i class="ti ti-sparkles" aria-hidden="true"></i> Draft my letter of interest ↗</button>
-      </div>
-      <div class="draft-preview" id="loi-draft-preview" style="display:none"></div>
-      <div class="btn-row" id="loi-refine-row" style="display:none">
-        <button class="btn btn-primary" onclick="getFeedbackLOI()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback ↗</button>
-        <button class="btn" onclick="copyDraft('loi-draft-preview')"><i class="ti ti-copy" aria-hidden="true"></i> Copy draft</button>
-      </div>
-      <div class="ai-response" id="loi-ai-fb" style="display:none"></div>
+      <input type="text" id="loiProgram" placeholder="e.g., University Hospital Fellowship Program" oninput="sv('loiProgram','loiProgram')" />
+      <label for="loiReason">Why is this your top choice? (Be specific)</label>
+      <textarea id="loiReason" rows="3" placeholder="e.g., Dr. Thompson's mentorship, the dedicated research year, expertise in complex cases, the collegial fellow culture I observed..." oninput="sv('loiReason','loiReason')"></textarea>
+      <label for="loiUpdate">Recent updates since your application (optional)</label>
+      <textarea id="loiUpdate" rows="2" placeholder="e.g., manuscript submitted, presentation selected, award received — leave blank if none" oninput="sv('loiUpdate','loiUpdate')"></textarea>
     </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="genLOI()"><i class="ti ti-sparkles" aria-hidden="true"></i> Draft my letter of interest</button>
+    </div>
+    <div class="draft-preview" id="loi-preview" style="display:none"></div>
+    <div class="btn-row" id="loi-refine" style="display:none">
+      <button class="btn btn-black" onclick="fbLOI()"><i class="ti ti-sparkles" aria-hidden="true"></i> Get coach feedback</button>
+      <button class="btn" onclick="copyEl('loi-preview')"><i class="ti ti-copy" aria-hidden="true"></i> Copy draft</button>
+    </div>
+    <div class="ai-box" id="loi-fb" style="display:none"></div>
+  </div>
 
-    <div id="withdraw-section" style="display:none">
-      <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> Withdrawing professionally is a mark of character. Fellowship medicine is a small world — program directors communicate with each other. A gracious withdrawal preserves the relationship and frees up spots for other applicants.</div>
-      <p style="font-size:13px; color: var(--color-text-secondary); margin-bottom: 1rem; line-height: 1.6;">A withdrawal email should be: <strong>brief</strong>, <strong>gracious</strong>, and sent as soon as you know you won't rank a program. Thank them for their time, decline without oversharing your reasoning, and wish them well.</p>
-      <p style="font-size:13px; font-weight:500; color: var(--color-text-secondary); margin-bottom: 8px;">Sample withdrawal email:</p>
-      <div class="draft-preview">Dear Dr. [Program Director] and [Program Name] Team,
+  <div id="sec-withdraw" style="display:none">
+    <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i><span>Fellowship medicine is a small world — program directors communicate with each other. A gracious withdrawal preserves your professional relationships and frees spots for other applicants.</span></div>
+    <div class="field-group">
+      <div class="field-group-title">Withdrawal email template</div>
+      <div class="draft-preview" style="margin-top:8px;">Dear Dr. [Program Director] and [Program Name] Team,
 
 Thank you so much for the opportunity to interview with your program. I thoroughly enjoyed learning about [Program Name] and meeting your faculty and current fellows.
 
@@ -460,156 +508,129 @@ I am grateful for your time and consideration, and I wish you and your fellows c
 
 With appreciation,
 [Your Name]</div>
-      <div class="btn-row" style="margin-top: 1rem;">
-        <button class="btn" onclick="copyWithdrawal()"><i class="ti ti-copy" aria-hidden="true"></i> Copy template</button>
+      <div class="btn-row" style="margin-top:.75rem;">
+        <button class="btn btn-gold" onclick="copyWithdraw()"><i class="ti ti-copy" aria-hidden="true"></i> Copy template</button>
       </div>
-      <p id="withdraw-copy-confirm" style="font-size:13px; color: var(--color-text-success); margin-top:8px; display:none;"><i class="ti ti-check" aria-hidden="true"></i> Copied!</p>
+      <p class="confirm-msg" id="wd-confirm"><i class="ti ti-check" aria-hidden="true"></i> Copied to clipboard!</p>
     </div>
+  </div>
 
-    <div class="btn-row" style="margin-top: 1.5rem; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 1rem;">
-      <button class="btn btn-success" onclick="completePostInterview()"><i class="ti ti-check" aria-hidden="true"></i> Mark module complete</button>
-      <button class="btn btn-primary" onclick="showModule(7)"><i class="ti ti-file-text" aria-hidden="true"></i> View my full report ↗</button>
-    </div>
-  </div>`;
+  <div class="divider"></div>
+  <div class="btn-row">
+    <button class="btn btn-success" onclick="completeM6()"><i class="ti ti-check" aria-hidden="true"></i> Mark module complete</button>
+    <button class="btn btn-black" onclick="showModule(7)"><i class="ti ti-file-text" aria-hidden="true"></i> View my full report →</button>
+  </div>
+</div>`;}
+
+async function genTY(){
+  sv('commInterviewer','commInterviewer');sv('commProgram','commProgram');
+  sv('commHighlight','commHighlight');sv('commGoalLink','commGoalLink');
+  if(!S.commInterviewer.trim()){alert("Please enter the interviewer's name first.");return;}
+  const p=document.getElementById('comm-preview');
+  p.textContent='Drafting your thank-you note...';p.style.display='block';
+  try{
+    const d=await claude(`Write a professional thank-you email for a ${S.specialty||'medical'} fellowship applicant to send within 24 hours of their interview. Concise (3 short paragraphs), genuine, personalized.\n\nInterviewer: ${S.commInterviewer}\nProgram: ${S.commProgram||S.specialty+' Fellowship Program'}\nConversation highlight: ${S.commHighlight||'the overall interview and learning about the program'}\nCareer goals connection: ${S.commGoalLink||'the program aligns well with their fellowship goals'}\n\nWrite subject line at top labeled "Subject:" then 3 paragraphs: (1) thank and reference conversation, (2) genuine interest with goal connection, (3) warm closing. ~150 words. Plain text only.`);
+    S.commDraft=d;p.textContent=d;
+    document.getElementById('ty-refine').style.display='flex';
+  }catch(e){p.textContent='Could not generate draft. Please try again.';}
 }
 
-async function generateThankYou() {
-  save('commInterviewer','commInterviewer'); save('commProgram','commProgram');
-  save('commHighlight','commHighlight'); save('commGoalLink','commGoalLink');
-  if (!state.commInterviewer.trim()) { alert('Please enter the interviewer\'s name first.'); return; }
-  const previewEl = document.getElementById('comm-draft-preview');
-  previewEl.textContent = 'Drafting your thank-you note...'; previewEl.style.display = 'block';
-  try {
-    const draft = await callClaude(`Write a professional, warm thank-you email for a ${state.specialty || 'medical'} fellowship applicant to send to their interviewer within 24 hours of their interview. The email should be concise (3 short paragraphs), genuine, and personalized.
-
-Interviewer: ${state.commInterviewer}
-Program: ${state.commProgram || state.specialty + ' Fellowship Program'}
-Specific conversation highlight to reference: ${state.commHighlight || 'the overall interview experience and learning about the program'}
-Connection to applicant's goals: ${state.commGoalLink || 'the program aligns well with their fellowship training goals'}
-
-Write just the email body — include a subject line at the top labeled "Subject:", then the email. Do not use markdown. Keep it to 3 paragraphs: (1) thank them and reference the specific conversation topic, (2) reiterate genuine interest with a specific connection to goals, (3) brief warm closing. Aim for ~150 words total.`);
-    state.commDraft = draft;
-    previewEl.textContent = draft;
-    document.getElementById('comm-refine-row').style.display = 'flex';
-  } catch(e) { previewEl.textContent = 'Could not generate draft. Please try again.'; }
+async function fbTY(){
+  const fb=document.getElementById('comm-fb');
+  fb.style.display='block';fb.innerHTML='<div style="color:#8A8070;font-style:italic;font-size:13px;">Reviewing...</div>';fb.classList.add('loading');
+  try{
+    const r=await claude(`A ${S.specialty||'medical'} fellowship applicant drafted this thank-you note. Feedback: appropriate tone? Personalized enough? Right length? Does it reinforce their candidacy? 1-2 targeted suggestions.\n\n${S.commDraft}`);
+    fb.innerHTML=aiBoxContent(r);fb.classList.remove('loading');S.commFB=r;
+    S.done[6]=true;updateProgress();document.getElementById('chk-6').textContent='✓';
+  }catch(e){fb.innerHTML='<div style="color:#8A8070;">Could not reach coach.</div>';fb.classList.remove('loading');}
 }
 
-async function getFeedbackThankYou() {
-  const fbEl = document.getElementById('comm-ai-fb');
-  fbEl.style.display = 'block'; fbEl.textContent = 'Reviewing your thank-you note...'; fbEl.classList.add('loading');
-  try {
-    const result = await callClaude(`A ${state.specialty || 'medical'} fellowship applicant has drafted the following thank-you note to send after their interview. Give brief, specific coaching feedback: Is the tone appropriate — warm but professional? Is it personalized enough? Is it the right length? Does it reinforce their candidacy without being over-eager? Give 1-2 targeted suggestions for improvement.\n\n${state.commDraft}`);
-    fbEl.textContent = result; fbEl.classList.remove('loading');
-    state.commFeedback = result;
-    state.completed[6] = true; updateProgress(); document.getElementById('chk-6').textContent = '✓';
-  } catch(e) { fbEl.textContent = 'Could not reach the AI coach. Please try again.'; fbEl.classList.remove('loading'); }
+async function genLOI(){
+  sv('loiProgram','loiProgram');sv('loiReason','loiReason');sv('loiUpdate','loiUpdate');
+  if(!S.loiReason.trim()){alert('Please explain why this is your top program first.');return;}
+  const p=document.getElementById('loi-preview');
+  p.textContent='Drafting your letter of interest...';p.style.display='block';
+  try{
+    const d=await claude(`Write a professional letter of interest for a ${S.specialty||'medical'} fellowship applicant. Sincere, specific, compelling — not generic.\n\nProgram: ${S.loiProgram||S.specialty+' Fellowship Program'}\nWhy top choice: ${S.loiReason}\nRecent updates: ${S.loiUpdate||'none'}\nCareer goals: ${S.goals||'advanced clinical training in '+(S.specialty||'their specialty')}\n\nSubject line first, then 3-4 paragraphs: (1) continued enthusiasm after interview, (2) specific program reasons, (3) goal alignment plus any updates, (4) gracious closing with ranking intent. ~200 words. Plain text.`);
+    S.loiDraft=d;p.textContent=d;
+    document.getElementById('loi-refine').style.display='flex';
+  }catch(e){p.textContent='Could not generate draft. Please try again.';}
 }
 
-async function generateLOI() {
-  save('loiProgram','loiProgram'); save('loiReason','loiReason'); save('loiUpdate','loiUpdate');
-  if (!state.loiReason.trim()) { alert('Please explain why this is your top program first.'); return; }
-  const previewEl = document.getElementById('loi-draft-preview');
-  previewEl.textContent = 'Drafting your letter of interest...'; previewEl.style.display = 'block';
-  try {
-    const draft = await callClaude(`Write a professional letter of interest (LOI) for a ${state.specialty || 'medical'} fellowship applicant to send to their top-choice program after completing interviews. The letter should be sincere, specific, and compelling — not generic.
-
-Program: ${state.loiProgram || state.specialty + ' Fellowship Program'}
-Why this is their top choice: ${state.loiReason}
-Recent updates/achievements: ${state.loiUpdate || 'none to add'}
-Applicant's career goals: ${state.goals || 'to develop advanced clinical skills in ' + (state.specialty || 'their specialty')}
-
-Write the letter body with a subject line at the top. 3-4 short paragraphs: (1) opening that states continued enthusiasm after the interview, (2) specific reasons this program is their top choice — name concrete program features, (3) brief mention of how the program aligns with career goals and any updates, (4) gracious closing with clear statement of intent to rank highly. Aim for ~200 words. Professional tone. Plain text, no markdown.`);
-    state.loiDraft = draft;
-    previewEl.textContent = draft;
-    document.getElementById('loi-refine-row').style.display = 'flex';
-  } catch(e) { previewEl.textContent = 'Could not generate draft. Please try again.'; }
+async function fbLOI(){
+  const fb=document.getElementById('loi-fb');
+  fb.style.display='block';fb.innerHTML='<div style="color:#8A8070;font-style:italic;font-size:13px;">Reviewing...</div>';fb.classList.add('loading');
+  try{
+    const r=await claude(`A ${S.specialty||'medical'} fellowship applicant drafted this letter of interest. Feedback: genuine or formulaic? Specific enough? Conveys commitment without desperation? Right length? 2 targeted suggestions.\n\n${S.loiDraft}`);
+    fb.innerHTML=aiBoxContent(r);fb.classList.remove('loading');S.loiFB=r;
+    S.done[6]=true;updateProgress();document.getElementById('chk-6').textContent='✓';
+  }catch(e){fb.innerHTML='<div style="color:#8A8070;">Could not reach coach.</div>';fb.classList.remove('loading');}
 }
 
-async function getFeedbackLOI() {
-  const fbEl = document.getElementById('loi-ai-fb');
-  fbEl.style.display = 'block'; fbEl.textContent = 'Reviewing your letter of interest...'; fbEl.classList.add('loading');
-  try {
-    const result = await callClaude(`A ${state.specialty || 'medical'} fellowship applicant has drafted the following letter of interest to their top program. Give specific coaching feedback: Does it feel genuine or formulaic? Is it specific enough about the program? Does it clearly convey commitment without being desperate? Is the length appropriate? Give 2 targeted suggestions.\n\n${state.loiDraft}`);
-    fbEl.textContent = result; fbEl.classList.remove('loading');
-    state.loiFeedback = result;
-    state.completed[6] = true; updateProgress(); document.getElementById('chk-6').textContent = '✓';
-  } catch(e) { fbEl.textContent = 'Could not reach the AI coach. Please try again.'; fbEl.classList.remove('loading'); }
+function copyEl(id){
+  const e=document.getElementById(id);if(e)navigator.clipboard.writeText(e.textContent);
 }
 
-function copyDraft(elId) {
-  const el = document.getElementById(elId);
-  if (el) navigator.clipboard.writeText(el.textContent);
+function copyWithdraw(){
+  navigator.clipboard.writeText(`Dear Dr. [Program Director] and [Program Name] Team,\n\nThank you so much for the opportunity to interview with your program. I thoroughly enjoyed learning about [Program Name] and meeting your faculty and current fellows.\n\nAfter careful consideration, I have decided to withdraw my application from [Program Name]. This was a difficult decision, as I have great respect for your program and the training you provide.\n\nI am grateful for your time and consideration, and I wish you and your fellows continued success.\n\nWith appreciation,\n[Your Name]`);
+  const c=document.getElementById('wd-confirm');if(c){c.style.display='block';setTimeout(()=>c.style.display='none',2500);}
 }
 
-function copyWithdrawal() {
-  const text = `Dear Dr. [Program Director] and [Program Name] Team,\n\nThank you so much for the opportunity to interview with your program. I thoroughly enjoyed learning about [Program Name] and meeting your faculty and current fellows.\n\nAfter careful consideration, I have decided to withdraw my application from [Program Name]. This was a difficult decision, as I have great respect for your program and the training you provide.\n\nI am grateful for your time and consideration, and I wish you and your fellows continued success.\n\nWith appreciation,\n[Your Name]`;
-  navigator.clipboard.writeText(text);
-  const conf = document.getElementById('withdraw-copy-confirm');
-  if (conf) { conf.style.display = 'block'; setTimeout(() => conf.style.display = 'none', 2500); }
-}
+function completeM6(){S.done[6]=true;updateProgress();document.getElementById('chk-6').textContent='✓';showModule(7);}
 
-function completePostInterview() {
-  state.completed[6] = true; updateProgress(); document.getElementById('chk-6').textContent = '✓';
-  showModule(7);
-}
+function mReport(){
+  const n=S.done.filter(Boolean).length;
+  const pct=Math.round(n/7*100);
+  const items=[
+    S.specialty&&{icon:'ti-stethoscope',label:'Target specialty',val:S.specialty},
+    S.story&&{icon:'ti-user',label:'My personal narrative',val:S.story},
+    S.storyFB&&{icon:'ti-sparkles',label:'Coach feedback — story',val:S.storyFB},
+    S.goals&&{icon:'ti-target',label:'My career goals',val:S.goals},
+    S.goalsFB&&{icon:'ti-sparkles',label:'Coach feedback — goals',val:S.goalsFB},
+    S.progFit&&{icon:'ti-book',label:'Why this fellowship',val:S.progFit},
+    S.progFitFB&&{icon:'ti-sparkles',label:'Coach feedback — program fit',val:S.progFitFB},
+    S.starA&&{icon:'ti-message-circle',label:'My STAR story',val:`Situation: ${S.starS}\n\nTask: ${S.starT}\n\nAction: ${S.starA}\n\nResult: ${S.starR}`},
+    S.starFB&&{icon:'ti-sparkles',label:'Coach feedback — STAR response',val:S.starFB},
+    S.questions&&{icon:'ti-help-circle',label:'My questions to ask programs',val:S.questions},
+    S.commDraft&&{icon:'ti-mail',label:'My thank-you note draft',val:S.commDraft},
+    S.commFB&&{icon:'ti-sparkles',label:'Coach feedback — thank-you note',val:S.commFB},
+    S.loiDraft&&{icon:'ti-star',label:'My letter of interest draft',val:S.loiDraft},
+    S.loiFB&&{icon:'ti-sparkles',label:'Coach feedback — letter of interest',val:S.loiFB},
+  ].filter(Boolean);
+  const empty=n===0;
+  return `<div class="section-card black-top">
+  <div class="card-heading"><i class="ti ti-file-text" style="color:#101010;" aria-hidden="true"></i><h2>My fellowship interview preparation report</h2></div>
+  <p class="card-desc">Your complete personalized coaching plan — everything you've built in this session. ${empty?'Complete the modules above to populate your report.':'Copy or save this to reference before each interview.'}</p>
+  ${!empty?`<div class="success-bar"><i class="ti ti-trophy" aria-hidden="true"></i><span>${pct}% complete — ${n===7?'you\'re interview-ready!':'keep going to complete your plan.'}</span></div>`:''}
+  ${empty?'<div style="padding:2rem;text-align:center;color:#8A8070;font-size:13px;">Complete the modules above to build your report.</div>':items.map(it=>`<div class="report-block"><div class="report-block-head"><i class="ti ${it.icon}" aria-hidden="true"></i><span>${it.label}</span></div><p>${it.val}</p></div>`).join('')}
+  ${!empty?`<div class="btn-row" style="margin-top:.5rem;">
+    <button class="btn btn-gold" onclick="copyReport()"><i class="ti ti-copy" aria-hidden="true"></i> Copy full report</button>
+    <button class="btn btn-black" onclick="showModule(0)"><i class="ti ti-refresh" aria-hidden="true"></i> Continue editing</button>
+  </div>
+  <p class="confirm-msg" id="rpt-confirm"><i class="ti ti-check" aria-hidden="true"></i> Copied to clipboard!</p>`:''}
+</div>`;}
 
-function renderReport() {
-  const done = state.completed.filter(Boolean).length;
-  const pct = Math.round((done / 7) * 100);
-  const sections = [];
-  if (state.specialty) sections.push({ icon: 'ti-stethoscope', title: 'Target specialty', content: state.specialty });
-  if (state.story) sections.push({ icon: 'ti-user', title: 'My personal narrative', content: state.story });
-  if (state.storyFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — story', content: state.storyFeedback });
-  if (state.goals) sections.push({ icon: 'ti-target', title: 'My career goals', content: state.goals });
-  if (state.goalsFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — goals', content: state.goalsFeedback });
-  if (state.programFit) sections.push({ icon: 'ti-book', title: 'Why this fellowship — my answer', content: state.programFit });
-  if (state.programFitFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — program fit', content: state.programFitFeedback });
-  if (state.starAction) sections.push({ icon: 'ti-message-circle', title: 'My STAR story', content: `Situation: ${state.starSituation}\n\nTask: ${state.starTask}\n\nAction: ${state.starAction}\n\nResult: ${state.starResult}` });
-  if (state.starFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — STAR response', content: state.starFeedback });
-  if (state.questionsToAsk) sections.push({ icon: 'ti-help-circle', title: 'My questions to ask programs', content: state.questionsToAsk });
-  if (state.commDraft) sections.push({ icon: 'ti-mail', title: 'My thank-you note draft', content: state.commDraft });
-  if (state.commFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — thank-you note', content: state.commFeedback });
-  if (state.loiDraft) sections.push({ icon: 'ti-star', title: 'My letter of interest draft', content: state.loiDraft });
-  if (state.loiFeedback) sections.push({ icon: 'ti-sparkles', title: 'Coach feedback — letter of interest', content: state.loiFeedback });
-  const empty = done === 0;
-  return `<div class="module-card">
-    <h2><i class="ti ti-file-text" aria-hidden="true"></i> My fellowship interview preparation report</h2>
-    <p class="desc">Your personalized plan, built from everything you've worked through in this coaching session. ${empty ? 'Complete the modules above to populate your report.' : 'Copy this to keep as a reference before each interview.'}</p>
-    ${!empty ? `<div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background: var(--color-background-success); border-radius: var(--border-radius-md); margin-bottom:1rem;">
-      <i class="ti ti-trophy" style="color: var(--color-text-success); font-size:18px;" aria-hidden="true"></i>
-      <span style="font-size:14px; color: var(--color-text-success); font-weight:500;">${pct}% of modules completed${done === 7 ? ' — you\'re interview-ready!' : ' — keep going to complete your plan.'}</span>
-    </div>` : ''}
-    ${empty ? '<p style="color: var(--color-text-secondary); font-size:14px; padding: 2rem; text-align:center;">Go back and complete the modules to build your report.</p>' : sections.map(s => `<div class="report-section"><h3><i class="ti ${s.icon}" aria-hidden="true"></i> ${s.title}</h3><p style="white-space:pre-wrap">${s.content}</p></div>`).join('')}
-    ${!empty ? `<div class="btn-row">
-      <button class="btn btn-primary" onclick="copyReport()"><i class="ti ti-copy" aria-hidden="true"></i> Copy full report</button>
-      <button class="btn" onclick="showModule(0)"><i class="ti ti-refresh" aria-hidden="true"></i> Continue editing</button>
-    </div>
-    <p id="copy-confirm" style="font-size:13px; color: var(--color-text-success); margin-top:8px; display:none;"><i class="ti ti-check" aria-hidden="true"></i> Copied to clipboard!</p>` : ''}
-  </div>`;
-}
-
-function copyReport() {
-  const parts = ['FELLOWSHIP INTERVIEW PREPARATION REPORT\n' + '='.repeat(40)];
-  if (state.specialty) parts.push('TARGET SPECIALTY\n' + state.specialty);
-  if (state.story) parts.push('MY PERSONAL NARRATIVE\n' + state.story);
-  if (state.storyFeedback) parts.push('COACH FEEDBACK — STORY\n' + state.storyFeedback);
-  if (state.goals) parts.push('MY CAREER GOALS\n' + state.goals);
-  if (state.goalsFeedback) parts.push('COACH FEEDBACK — GOALS\n' + state.goalsFeedback);
-  if (state.programFit) parts.push('WHY THIS FELLOWSHIP\n' + state.programFit);
-  if (state.programFitFeedback) parts.push('COACH FEEDBACK — PROGRAM FIT\n' + state.programFitFeedback);
-  if (state.starAction) parts.push(`MY STAR STORY\nSituation: ${state.starSituation}\nTask: ${state.starTask}\nAction: ${state.starAction}\nResult: ${state.starResult}`);
-  if (state.starFeedback) parts.push('COACH FEEDBACK — STAR\n' + state.starFeedback);
-  if (state.questionsToAsk) parts.push('QUESTIONS TO ASK PROGRAMS\n' + state.questionsToAsk);
-  if (state.commDraft) parts.push('THANK-YOU NOTE DRAFT\n' + state.commDraft);
-  if (state.commFeedback) parts.push('COACH FEEDBACK — THANK-YOU NOTE\n' + state.commFeedback);
-  if (state.loiDraft) parts.push('LETTER OF INTEREST DRAFT\n' + state.loiDraft);
-  if (state.loiFeedback) parts.push('COACH FEEDBACK — LETTER OF INTEREST\n' + state.loiFeedback);
-  navigator.clipboard.writeText(parts.join('\n\n---\n\n')).then(() => {
-    const conf = document.getElementById('copy-confirm');
-    if (conf) { conf.style.display = 'block'; setTimeout(() => conf.style.display = 'none', 3000); }
+function copyReport(){
+  const parts=['FELLOWSHIP INTERVIEW PREPARATION REPORT\n'+'='.repeat(40)];
+  if(S.specialty)parts.push('TARGET SPECIALTY\n'+S.specialty);
+  if(S.story)parts.push('MY PERSONAL NARRATIVE\n'+S.story);
+  if(S.storyFB)parts.push('COACH FEEDBACK — STORY\n'+S.storyFB);
+  if(S.goals)parts.push('MY CAREER GOALS\n'+S.goals);
+  if(S.goalsFB)parts.push('COACH FEEDBACK — GOALS\n'+S.goalsFB);
+  if(S.progFit)parts.push('WHY THIS FELLOWSHIP\n'+S.progFit);
+  if(S.progFitFB)parts.push('COACH FEEDBACK — PROGRAM FIT\n'+S.progFitFB);
+  if(S.starA)parts.push(`MY STAR STORY\nSituation: ${S.starS}\nTask: ${S.starT}\nAction: ${S.starA}\nResult: ${S.starR}`);
+  if(S.starFB)parts.push('COACH FEEDBACK — STAR\n'+S.starFB);
+  if(S.questions)parts.push('QUESTIONS TO ASK PROGRAMS\n'+S.questions);
+  if(S.commDraft)parts.push('THANK-YOU NOTE DRAFT\n'+S.commDraft);
+  if(S.commFB)parts.push('COACH FEEDBACK — THANK-YOU NOTE\n'+S.commFB);
+  if(S.loiDraft)parts.push('LETTER OF INTEREST DRAFT\n'+S.loiDraft);
+  if(S.loiFB)parts.push('COACH FEEDBACK — LETTER OF INTEREST\n'+S.loiFB);
+  navigator.clipboard.writeText(parts.join('\n\n---\n\n')).then(()=>{
+    const c=document.getElementById('rpt-confirm');
+    if(c){c.style.display='block';setTimeout(()=>c.style.display='none',3000);}
   });
 }
 
-showModule(0);
-updateProgress();
+showModule(0);updateProgress();
 </script>
