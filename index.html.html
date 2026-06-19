@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Fellowship Interview Coach</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial;
+  background: #f5f5f5;
+}
+
+/* UCF colors */
+:root {
+  --gold: #FFC904;
+  --black: #000000;
+}
+
+/* Layout */
+.container {
+  max-width: 1050px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  background: var(--black);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-left: 6px solid var(--gold);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.prompt-box {
+  background: #fff8d6;
+  border-left: 4px solid var(--gold);
+  padding: 12px;
+  margin-bottom: 12px;
+  font-size: 0.9em;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+textarea, input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background: var(--gold);
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #e6b800;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>Fellowship Interview Coach</h1>
+<p>Structured, medicine-specific preparation tool for residents</p>
+</div>
+
+<!-- PROFILE -->
+<div class="card">
+<h2>Profile</h2>
+
+<label>Name</label>
+<input id="name">
+
+<label>Specialty</label>
+<select id="specialty">
+<option>Cardiology</option>
+<option>GI</option>
+<option>Rheumatology</option>
+<option>Heme/Onc</option>
+<option>Other</option>
+</select>
+
+<label>Interview Format</label>
+<select id="format">
+<option>Virtual</option>
+<option>In-person</option>
+</select>
+
+</div>
+
+<!-- STORY -->
+<div class="card">
+<h2>1. Tell Your Story</h2>
+
+<div class="prompt-box">
+<b>Coach Prompts:</b><br>
+• What experiences pulled you toward this specialty?<br>
+• What patient population or problem keeps you engaged?<br>
+• What kind of physician do you hope to become?
+</div>
+
+<label>Why this specialty?</label>
+<textarea id="why"></textarea>
+
+<label>Origin story</label>
+<textarea id="origin"></textarea>
+
+<div class="prompt-box">
+• Think about a rotation, mentor, or patient<br>
+• Focus on specifics, not general statements
+</div>
+
+<label>Career goals</label>
+<textarea id="goals"></textarea>
+
+<label>1-minute pitch</label>
+<textarea id="pitch"></textarea>
+
+</div>
+
+<!-- PROGRAM FIT -->
+<div class="card">
+<h2>2. Program Fit</h2>
+
+<div class="prompt-box">
+<b>Coach Prompts:</b><br>
+• What specifically draws you to this program?<br>
+• Which faculty or clinical opportunities matter most?<br>
+• What thoughtful questions will help you decide fit?
+</div>
+
+<label>Program Name</label>
+<input id="program">
+
+<label>Why this program fits you</label>
+<textarea id="fit"></textarea>
+
+<label>Questions to ask</label>
+<textarea id="questions"></textarea>
+
+</div>
+
+<!-- STORIES -->
+<div class="card">
+<h2>3. Evidence Bank</h2>
+
+<div class="prompt-box">
+<b>Coach Prompts:</b><br>
+• What stories demonstrate your growth?<br>
+• Which case shows clinical reasoning or compassion?<br>
+• How have you handled challenge or conflict?
+</div>
+
+<label>Patient story</label>
+<textarea id="patient"></textarea>
+
+<label>Teamwork story</label>
+<textarea id="team"></textarea>
+
+<label>Challenge or mistake</label>
+<textarea id="challenge"></textarea>
+
+</div>
+
+<!-- PRACTICE -->
+<div class="card">
+<h2>4. Practice</h2>
+
+<div class="prompt-box">
+<b>Coach Prompts:</b><br>
+• Are you answering clearly and directly?<br>
+• Are you using specific examples?<br>
+• Where can you be more concise?
+</div>
+
+<label>Question</label>
+<select id="question">
+<option>Tell me about yourself</option>
+<option>Why this specialty?</option>
+<option>Tell me about a mistake</option>
+<option>Why our program?</option>
+</select>
+
+<label>Your response</label>
+<textarea id="answer"></textarea>
+
+<label>Confidence (1–5)</label>
+<input type="range" min="1" max="5" id="confidence" value="3">
+
+</div>
+
+<!-- LOGISTICS -->
+<div class="card">
+<h2>5. Logistics</h2>
+
+<div class="prompt-box">
+<b>Coach Prompts:</b><br>
+• Is your environment distraction-free?<br>
+• Is your tech tested and reliable?<br>
+• How will you capture impressions after the interview?
+</div>
+
+<label><input type="checkbox" id="tech"> Tech ready</label>
+<label><input type="checkbox" id="env"> Environment ready</label>
+<label><input type="checkbox" id="attire"> Attire ready</label>
+
+<label>Preparation notes</label>
+<textarea id="plan"></textarea>
+
+</div>
+
+<!-- DOWNLOAD -->
+<div class="card">
+<h2>Download Your Interview Plan</h2>
+<button onclick="download()">Download Word Document</button>
+</div>
+
+</div>
+
+<script>
+
+function download(){
+
+let content = `
+<html xmlns:o='urn:schemas-microsoft-com:office:office'
+xmlns:w='urn:schemas-microsoft-com:office:word'
+xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<style>
+body { font-family: Arial; padding: 20px; }
+h1 { color: black; }
+h2 { color: #FFC904; border-bottom: 2px solid #FFC904; }
+</style>
+</head>
+
+<body>
+
+<h1>Fellowship Interview Preparation Plan</h1>
+
+<p>
+<b>Name:</b> ${name.value}<br>
+<b>Specialty:</b> ${specialty.value}<br>
+<b>Format:</b> ${format.value}
+</p>
+
+<h2>Story & Goals</h2>
+<b>Why specialty</b><br>${why.value}<br><br>
+<b>Origin</b><br>${origin.value}<br><br>
+<b>Goals</b><br>${goals.value}<br><br>
+<b>Pitch</b><br>${pitch.value}
+
+<h2>Program Fit</h2>
+<b>Program:</b> ${program.value}<br><br>
+${fit.value}<br><br>
+<b>Questions</b><br>${questions.value}
+
+<h2>Evidence</h2>
+<b>Patient</b><br>${patient.value}<br><br>
+<b>Team</b><br>${team.value}<br><br>
+<b>Challenge</b><br>${challenge.value}
+
+<h2>Practice</h2>
+<b>${question.value}</b><br>${answer.value}<br><br>
+Confidence: ${confidence.value}/5
+
+<h2>Logistics</h2>
+${tech.checked ? "✔ Tech ready<br>" : ""}
+${env.checked ? "✔ Environment ready<br>" : ""}
+${attire.checked ? "✔ Attire ready<br>" : ""}
+
+<br>${plan.value}
+
+</body>
+</html>
+`;
+
+let blob = new Blob(['\ufeff', content], {type: 'application/msword'});
+
+let url = URL.createObjectURL(blob);
+let link = document.createElement("a");
+
+link.href = url;
+link.download = "Fellowship_Interview_Plan.doc";
+
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+
+}
+
+</script>
+
+</body>
+</html>
